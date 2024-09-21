@@ -12,7 +12,8 @@ YTICS=`../bin/linlogytics $LINSCALELIMIT`
 #echo $YTICS 1>&2
 
 cat <<EOF
-set terminal png size 900,600
+set terminal svg size 900,600 font "monospace"
+set colorsequence classic
 set xdata time
 set timefmt "%s"
 set output "$FILENAME"
