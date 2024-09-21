@@ -122,7 +122,7 @@ EOF
 # optional GPS tracking
 #gnuplot <<EOF
 #set terminal svg size 900,600 font "monospace"
-set colorsequence classic
+#set colorsequence classic
 #set xdata time
 #set timefmt "%s"
 #set output "gps-lock.svg"
@@ -140,7 +140,7 @@ set colorsequence classic
 #../bin/histogram-snr <snr-history >snr-history.history
 #gnuplot <<EOF
 #set terminal svg size 900,600 font "monospace"
-set colorsequence classic
+#set colorsequence classic
 #set output "gps-snr-histogram.svg"
 #set grid
 #set xtic rotate by -45 scale 0
@@ -154,7 +154,7 @@ set colorsequence classic
 #../bin/snr-hourly snr-history >snr-history.hourly
 #gnuplot <<EOF
 #set terminal svg size 900,600 font "monospace"
-set colorsequence classic
+#set colorsequence classic
 #set xdata time
 #set timefmt "%s"
 #set output "gps-snr-hourly.svg"
@@ -172,3 +172,8 @@ set colorsequence classic
 if [ -x custom-plot ]; then
   ./custom-plot
 fi
+
+svgo --multipass --pretty --indent=0 ./*.svg
+for i in *.svg; do
+  gzip -kf9 "$i"
+done

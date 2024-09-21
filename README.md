@@ -17,10 +17,16 @@ To setup:
 	# edit run1/index.html.tmpl to show the graphs for the IPs of the remote clocks
 	# edit bin/run if your logdir is different: LOGDIR=/var/log/chrony
 
+You probably also want to configure your webserver to serve .gz files with the correct Content-Encoding, or to compress .svg on-the-fly
+
 To run (under screen/tmux):
 
 	cd run1 ; ../bin/loop
 	# edit run1/notes to keep notes
+
+To run (under cron):
+
+	0 * * * * /path/to/chrony-graph/run1/run-cron
 
 Optional scripts:
 
