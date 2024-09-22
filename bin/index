@@ -3,6 +3,7 @@
 use strict;
 use Cwd;
 use File::Basename;
+use POSIX qw(strftime);
 
 sub read_hash {
   my $fn = shift;
@@ -30,7 +31,7 @@ $NOTES =~ s/</&lt;/g;
 $NOTES =~ s/>/&gt;/g;
 $NOTES =~ s/&/&amp;/g;
 
-my $time = scalar(gmtime());
+my $time = strftime('%F<wbr>T%TZ', gmtime());
 
 my $THISHOST = $ENV{THISHOST};
 my $FREQ = $ENV{FREQ};
