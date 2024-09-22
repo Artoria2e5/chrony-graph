@@ -4,6 +4,7 @@ use strict;
 use Cwd;
 use File::Basename;
 use POSIX qw(strftime);
+use Sys::Hostname;
 
 sub read_hash {
   my $fn = shift;
@@ -33,7 +34,7 @@ $NOTES =~ s/&/&amp;/g;
 
 my $time = strftime('%F<wbr>T%TZ', gmtime());
 
-my $THISHOST = $ENV{THISHOST};
+my $THISHOST = $ENV{THISHOST} // hostname();
 my $FREQ = $ENV{FREQ};
 
 my @remotes = glob("remote-statistics.*.{svg,png}");
