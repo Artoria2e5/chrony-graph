@@ -173,7 +173,9 @@ if [ -x custom-plot ]; then
   ./custom-plot
 fi
 
-svgo --multipass --pretty --indent=0 ./*.svg
+for i in *.svg; do
+  time timelimit -T10 -t120 -- svgo --pretty --indent=0 ./"$i"
+done
 for i in *.svg; do
   gzip -kf9 "$i"
 done
