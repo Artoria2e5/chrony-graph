@@ -13,6 +13,7 @@ To setup:
 	# edit bin/copy-to-website to copy the files to your website
 	cp titles.example titles
 	# edit titles to have the IPs and hostnames of your remote clocks
+	# if you want to customize hostnames of other people's clocks, use titles-notmine
 	cp -a runX run1
 	# edit run1/index.html.tmpl to show the graphs for the IPs of the remote clocks
 	# edit bin/run if your logdir is different: LOGDIR=/var/log/chrony
