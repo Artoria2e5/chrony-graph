@@ -6,6 +6,8 @@ LINSCALELIMIT=`../bin/linscalelimit 1 5 tracking.log | ../bin/mul 1000000`
 
 YTICS=`../bin/linlogytics $LINSCALELIMIT`
 
+BIN="bins=600 binvalue=avg"
+
 gnuplot <<EOF
 set terminal svg size 900,600 font "monospace"
 set colorsequence classic
@@ -28,8 +30,8 @@ set key bottom right box
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:(\$6*1000000) title "offset" with linespoints, \
- "tracking.log" using 1:4 title "local clock error" with linespoints axis x1y2
+ "tracking.log" using 1:(\$6*1000000) $BIN title "offset" with linespoints , \
+ "tracking.log" using 1:4 $BIN title "local clock error" with linespoints axis x1y2
 EOF
 
 NINETYFIVE=`../bin/percentile 8 95 tracking.log | ../bin/mul 1000000`
@@ -61,7 +63,7 @@ set label 6 gprintf("99%% - 1%% = $NN_M_O us",98) at graph 0.01,0.7 left front
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:(\$9*1000000) title "stddev" with linespoints, \
+ "tracking.log" using 1:(\$9*1000000) $BIN title "stddev" with linespoints, \
  $NINETYNINE title "99th percentile", \
  $NINETYFIVE title "95th percentile", \
  $FIVE title "5th percentile", \
@@ -96,7 +98,7 @@ set label 6 gprintf("99%% - 1%% = $NN_M_O ppm",98) at graph 0.01,0.7 left front
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:5 title "skew" with linespoints, \
+ "tracking.log" using 1:5 $BIN title "skew" with linespoints, \
  $NINETYNINE title "99th percentile", \
  $NINETYFIVE title "95th percentile", \
  $FIVE title "5th percentile", \

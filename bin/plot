@@ -8,6 +8,7 @@ export GNUPLOT_DEFAULT_GDFONT=LiberationSans-Regular
 ../bin/diff-freq-graph
 ../bin/skew-graph
 
+BIN="bins=600 binvalue=avg"
 NINETYFIVE=`../bin/percentile 3 95 tracking.log`
 NINETYNINE=`../bin/percentile 3 99 tracking.log`
 FIVE=`../bin/percentile 3 5 tracking.log`
@@ -36,7 +37,7 @@ set label 6 gprintf("99%% - 1%% = $NN_M_O ppm",98) at graph 0.01,0.05 left front
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:4 title "local clock error" with linespoints, \
+ "tracking.log" using 1:4 $BIN title "local clock error" with linespoints, \
  $NINETYNINE title "99th percentile", \
  $NINETYFIVE title "95th percentile", \
  $FIVE title "5th percentile", \
@@ -78,7 +79,7 @@ set label 6 gprintf("99%% - 1%% = %1.2f us", $NN_M_O) at graph 0.01,0.05 left fr
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:(\$6 * 1000000) title "local clock offset" with linespoints, \
+ "tracking.log" using 1:(\$6 * 1000000) $BIN title "local clock offset" with linespoints, \
  $NINETYNINE title "99th percentile", \
  $NINETYFIVE title "95th percentile", \
  $FIVE title "5th percentile", \
@@ -116,7 +117,7 @@ set key off
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log.history" using 1:2 title "histogram" with boxes
+ "tracking.log.history" using 1:2 bins=600 title "histogram" with boxes
 EOF
 
 # optional GPS tracking
