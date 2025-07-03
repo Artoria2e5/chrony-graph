@@ -117,7 +117,7 @@ set key off
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log.history" using 1:2 bins=600 title "histogram" with boxes
+ "tracking.log.history" using 1:2 title "histogram" with boxes
 EOF
 
 # optional GPS tracking

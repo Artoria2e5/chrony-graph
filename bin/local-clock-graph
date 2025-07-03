@@ -63,7 +63,7 @@ set label 6 gprintf("99%% - 1%% = $NN_M_O us",98) at graph 0.01,0.7 left front
 set lmargin 12
 set rmargin 12
 plot \
- "tracking.log" using 1:(\$9*1000000) $BIN title "stddev" with linespoints, \
+ "tracking.log" using 1:(\$9*1000000) title "stddev" with linespoints, \
  $NINETYNINE title "99th percentile", \
  $NINETYFIVE title "95th percentile", \
  $FIVE title "5th percentile", \
