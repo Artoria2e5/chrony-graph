@@ -15,6 +15,25 @@ else
   rdns() { :; }
 fi
 
+rnds-select() {
+  local r=$(rdns "$1")
+  if [[ -z "$r" ]]; then
+    return 1
+  fi
+
+  local rs
+  mapfile -t rs <<< "$r"
+  for i in "${rs[@]}"; do
+    i=${i%.}
+    if [[ -z $i || $i == *.arpa || $i =~ ^[^.]+.[^.]+$ ]]; then
+      continue
+    fi
+    echo "${i//'/'/_}"
+    return 0
+  done
+  return 1
+}
+
 i=0
 for stat in statistics.*; do
   date=`tail -1 $stat | cut -d" " -f1`
@@ -28,16 +47,8 @@ done | grep -v NMEA | sort -n | while read date file; do
         192.168.*|10.*|172.16.*|127.*|fe80:*|fd*|fc*|169.254.*)
         ;;
         *)
-          oldtitle=$title
-          title=$(rdns "$title")
-          if [[ -n "$title" ]]; then
-            title=${title%.}
-            title=${title%%$'\n'*}
-            if [[ $title =~ ^[^.]+\.[^.]+$ ]]; then # one dot: likely rDNS protection like threatoff.eu
-              title=$oldtitle
-            fi
-            echo "$file $title" >> ../titles-notmine
-          fi
+          title=$(rnds-select "$title" || echo "$title")
+          echo "$file $title" >> ../titles-notmine
         ;;
       esac
     fi
