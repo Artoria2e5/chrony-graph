@@ -6,6 +6,15 @@ if [ -z "$TEMPLATE" ]; then
   exit 1
 fi
 
+if command -v dig &>/dev/null; then
+  rdns() { dig -x "$1" +short; }
+elif command -v drill &>/dev/null; then
+  rdns() { drill -Q -x "$1"; }
+else
+  echo "No RDNS lookup tool found, using IP as title. Install 'dig' or 'drill' for better results." >&2
+  rdns() { :; }
+fi
+
 i=0
 for stat in statistics.*; do
   date=`tail -1 $stat | cut -d" " -f1`
@@ -14,15 +23,19 @@ done | grep -v NMEA | sort -n | while read date file; do
   title=`grep "^$file " ../titles ../titles-notmine 2> /dev/null | cut -d" " -f2`
   if [ -z "$title" ]; then
     title=${file#statistics.}
-    if [[ $title =~ '([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4}' || $title =~ '[A-Fa-f0-9]{1,4}::' ]] || [[ $title =~ ([0-9]{1,3}\.){3}[0-9]{1,3} ]]; then
+    if [[ $title =~ ([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4} || $title =~ [A-Fa-f0-9]{1,4}:: || $title =~ ([0-9]{1,3}\.){3}[0-9]{1,3} ]]; then
       case $title in
         192.168.*|10.*|172.16.*|127.*|fe80:*|fd*|fc*|169.254.*)
         ;;
         *)
-          title=$(dig -x "$title" +short)
-          if [[ -n "$title" && title != threatoff.eu ]]; then
+          oldtitle=$title
+          title=$(rdns "$title")
+          if [[ -n "$title" ]]; then
             title=${title%.}
             title=${title%%$'\n'*}
+            if [[ $title =~ [^.]+\.[^.]+ ]]; then # one dot: likely rDNS protection like threatoff.eu
+              title=$oldtitle
+            fi
             echo "$file $title" >> ../titles-notmine
           fi
         ;;
