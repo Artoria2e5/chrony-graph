@@ -33,7 +33,7 @@ done | grep -v NMEA | sort -n | while read date file; do
           if [[ -n "$title" ]]; then
             title=${title%.}
             title=${title%%$'\n'*}
-            if [[ $title =~ [^.]+\.[^.]+ ]]; then # one dot: likely rDNS protection like threatoff.eu
+            if [[ $title =~ ^[^.]+\.[^.]+$ ]]; then # one dot: likely rDNS protection like threatoff.eu
               title=$oldtitle
             fi
             echo "$file $title" >> ../titles-notmine
